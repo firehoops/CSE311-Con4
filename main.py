@@ -8,8 +8,8 @@ import numpy
 class view():
 
     def __init__(self, master):
-        option = tkinter.messagebox.askquestion('Connect Four', 'Click Yes if you want a gui, else click no for a text view ')
-        if option == 'yes':
+        option = input("Type text or gui for your version of Connect Four")
+        if option == "gui":
             # mainFrame = Frame(master,width = 1000, height = 1000)
             # mainFrame.grid()
             header = tkinter.font.Font(size = 20, weight = tkinter.font.BOLD)
@@ -29,7 +29,7 @@ class view():
             row2 = Button(bottomFrame, text="Add Piece to Row 2", command= lambda: self.addPiece(c,player1))
             row2.grid(row=4, column=1, sticky=E)
         else:
-            self.master.quit()
+
             self.textView()
 
     #
@@ -49,7 +49,33 @@ class view():
 
         #Build Board
         board = numpy.zeros((6,7))
-        print(board)
+        run = True
+        playerValue = 1
+        row = 0
+
+
+
+        def checkRow(board,colChoice):
+            for rowNum in range(6):
+                if board[rowNum][colChoice] == 0:
+                    return rowNum
+
+
+        while(run):
+            colChoice = int(input("Which Column 0,1,2,3,4,5, or 6"))
+
+            if playerValue == 1:
+                row = checkRow(board,colChoice)
+                board[row][colChoice] = playerValue
+                playerValue += 1
+            else:
+                row = checkRow(board, colChoice)
+                board[row][colChoice] = playerValue
+                playerValue -= 1
+
+            if colChoice == 7:
+                break
+            print(board)
 
 
 
@@ -63,7 +89,7 @@ root.mainloop()
 class controller():
 
     def __init__(self):
-        return self
+        pass
 
 
 
@@ -71,4 +97,4 @@ class controller():
 class model():
 
     def __init__(self):
-        return self
+        pass
