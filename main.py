@@ -1,7 +1,7 @@
 from tkinter import *
 import tkinter.font
 import tkinter.messagebox
-import numpy
+
 
 
 #Text-Based and GUI
@@ -48,29 +48,45 @@ class view():
     def textView(self):
 
         #Build Board
-        board = numpy.zeros((6,7))
+        #board = numpy.zeros((6,7))
+        ROW_COUNT = 6
+        COL_COUNT = 7
+        board = [[0]*COL_COUNT for r in range(ROW_COUNT)]
         run = True
         playerValue = 1
-        row = 0
+        printBoard = ""
+        colChoice = 0
+
+        #Initialize board
+        def createBoard(board,ROW_COUNT, COL_COUNT, colChoice, printBoard):
+            for r in range(ROW_COUNT):
+                for c in range(COL_COUNT):
+                    printBoard += "|" + str(board[r][c])
+                printBoard += "|\n"
+            print(printBoard)
 
 
 
-        def checkRow(board,colChoice):
-            for rowNum in range(6):
+
+        def checkRow(board,colChoice,rowCount):
+            for rowNum in range(rowCount):
                 if board[rowNum][colChoice] == 0:
                     return rowNum
 
 
         while(run):
+            createBoard(board, ROW_COUNT, COL_COUNT, colChoice,printBoard)
             colChoice = int(input("Which Column 0,1,2,3,4,5, or 6"))
 
             if playerValue == 1:
-                row = checkRow(board,colChoice)
+                row = checkRow(board,colChoice,ROW_COUNT)
                 board[row][colChoice] = playerValue
+                createBoard(board, ROW_COUNT, COL_COUNT, colChoice,printBoard)
                 playerValue += 1
             else:
-                row = checkRow(board, colChoice)
+                row = checkRow(board, colChoice, ROW_COUNT)
                 board[row][colChoice] = playerValue
+                createBoard(board, ROW_COUNT, COL_COUNT, colChoice,printBoard)
                 playerValue -= 1
 
             if colChoice == 7:
