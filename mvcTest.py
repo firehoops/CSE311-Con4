@@ -10,7 +10,7 @@ class View:
 
         option = input("Type text or gui for your version of Connect Four")
 
-        if option == "gui":
+        if option == "gui" or "GUI" or "Gui":
             self.gui(master)
         else:
             self.textView()
