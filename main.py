@@ -3,7 +3,6 @@ import tkinter.font
 import tkinter.messagebox
 
 
-
 #Text-Based and GUI
 class view():
 
@@ -48,13 +47,14 @@ class view():
     def textView(self):
 
         #Build Board
-        #board = numpy.zeros((6,7))
+
         ROW_COUNT = 6
         COL_COUNT = 7
         board = [[0]*COL_COUNT for r in range(ROW_COUNT)]
         run = True
         playerValue = 1
         printBoard = ""
+        row = 0
         colChoice = 0
 
         #Initialize board
@@ -64,9 +64,6 @@ class view():
                     printBoard += "|" + str(board[r][c])
                 printBoard += "|\n"
             print(printBoard)
-
-
-
 
         def checkRow(board,colChoice,rowCount):
             for rowNum in range(rowCount):
@@ -114,3 +111,4 @@ class model():
 
     def __init__(self):
         pass
+
