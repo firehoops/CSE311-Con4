@@ -10,7 +10,7 @@ class View:
 
         option = input("Type text or gui for your version of Connect Four")
 
-        if option == "gui" or "GUI" or "Gui":
+        if option == "gui" or option == "GUI" or option == "Gui":
             self.gui(master)
         else:
             self.textView()
@@ -56,8 +56,9 @@ class View:
                 canvas.create_oval(x0, y0, x1, y1, fill="red")
 
     def switchView(self,master):
-        self.quit(master)
+        master.destroy()
         self.textView()
+
     def quit(self,master):
         master.quit()
 
@@ -93,7 +94,12 @@ class View:
 
         while(run):
             createBoard(board,ROW_COUNT,COL_COUNT, colChoice,printBoard)
-            colChoice = int(input("Which Column 0,1,2,3,4,5, or 6"))
+            colChoice = int(input("Select a Column 0,1,2,3,4,5,6, or select 8 to quit or 9 to switch to the GUI "))
+
+            if colChoice == 8:
+                break
+            # if colChoice == 9:
+            #     self.gui(master)
 
             if playerValue == 1:
                 row = checkRow(board,colChoice,ROW_COUNT)
@@ -106,9 +112,10 @@ class View:
                 createBoard(board, ROW_COUNT, COL_COUNT, colChoice,printBoard)
                 playerValue -= 1
 
-            if colChoice == 7:
-                break
+
             print(board)
+
+
 
 #Handle Connecting view and model
 class Controller():
