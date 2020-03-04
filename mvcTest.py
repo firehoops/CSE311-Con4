@@ -8,6 +8,9 @@ class View:
 
     def __init__(self,master):
 
+        con = Controller()
+        print(con.setBoard())
+
         option = input("Type text or gui for your version of Connect Four")
 
         if option == "gui" or "GUI" or "Gui":
@@ -111,11 +114,16 @@ class View:
             print(board)
 
 #Handle Connecting view and model
-class Controller():
+class Controller:
 
+    def __init__(self):
+        pass
+
+    def getBoard(self):
+        return self.board
     def setBoard(self):
-        testBoard = [[0] * 7 for r in range(6)]
-        return testBoard
+        self.board = [[0] * 7 for r in range(6)]
+        return self.board
 
 #Handle Logic
 class Model:
