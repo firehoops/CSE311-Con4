@@ -158,7 +158,6 @@ class Controller:
         c.grid(row=1, column=0, rowspan=6, columnspan=7)
 
         colTracker = [*range(7)]
-        print(colTracker)
         if player1:
             Button(bottomFrame, text="Row 1", command=lambda: \
                 self.addPiece(c, player1, colTracker[0])).grid( row=9, column=0, sticky=E)
