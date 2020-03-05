@@ -47,7 +47,7 @@ class Model:
         return self.board
 
     def winnerExists(self):
-        # check vertical spaces
+        # Check Horizontal
         for x in range(self.ROW_COUNT):
             for y in range(self.COL_COUNT - 3):
                 if self.board[x][y] == self.playerValue \
@@ -55,6 +55,15 @@ class Model:
                         and self.board[x][y + 2] == self.playerValue \
                         and self.board[x][y + 3] == self.playerValue:
                     return True
+        # Check Vertical
+        for x in range(self.ROW_COUNT):
+            for y in range(self.COL_COUNT - 3):
+                if self.board[x][y] == self.playerValue \
+                        and self.board[x + 1][y] == self.playerValue \
+                        and self.board[x + 2][y] == self.playerValue \
+                        and self.board[x + 3][y] == self.playerValue:
+                    return True
+
 
     #Checking if row is free
     #Params: Board, col choice, and amount of rows
@@ -93,7 +102,7 @@ class Controller:
 
         #Starting the game
         option = view.getUserInput("Type text or gui for your version of Connect Four\n")
-        if option == "gui" or option == "GUI" or option == "Gui":
+        if option.lower() == "gui":
             self.gui(master)
         else:
             self.textView()
