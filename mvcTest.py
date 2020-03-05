@@ -1,12 +1,14 @@
 from tkinter import *
 import tkinter.font
 import tkinter.messagebox
-
+import time
+import os
 
 #Text-Based and GUI
 class View:
     def __init__(self):
-        pass
+        self.ROW_COUNT = 6
+        self.COL_COUNT = 7
 
     #Use this to get user text input
     def getUserInput(self, message):
@@ -15,11 +17,12 @@ class View:
 
     #Params: board, row count, col count, user col choice, and
     #Return: Returns nothing prints out the gameboard
-    def createBoard(self,board,ROW_COUNT, COL_COUNT, colChoice, printBoard):
-        boardRotate = board[::-1]
-        for r in range(ROW_COUNT):
+    def displayBoard(self,board):
+        printBoard = ""
 
-            for c in range(COL_COUNT):
+        boardRotate = board[::-1]
+        for r in range(self.ROW_COUNT):
+            for c in range(self.COL_COUNT):
                 printBoard += "|" + str(boardRotate[r][c])
             printBoard += "|\n"
         print(printBoard)
@@ -31,16 +34,53 @@ class View:
 #This is where the board is created and stored during runtime.
 class Model:
 
-    __board = [[0] * 7 for r in range(6)]
-
     def __init__(self):
-        pass
 
+        self.playerValue = 1
+        self.ROW_COUNT = 6
+        self.COL_COUNT = 7
+        self.board = [[0] * self.COL_COUNT for r in range(self.ROW_COUNT)]
+        self.moveCount = 0
+
+    #Returns the board
     def getBoard(self):
-        return self.__board
-    def setBoard(self):
-        self.board = [[0] * 7 for r in range(6)]
         return self.board
+
+    def winnerExists(self):
+        # check vertical spaces
+        for x in range(self.ROW_COUNT):
+            for y in range(self.COL_COUNT - 3):
+                if self.board[x][y] == self.playerValue \
+                        and self.board[x][y + 1] == self.playerValue \
+                        and self.board[x][y + 2] == self.playerValue \
+                        and self.board[x][y + 3] == self.playerValue:
+                    return True
+
+    #Checking if row is free
+    #Params: Board, col choice, and amount of rows
+    #Returns: Returns the row number if valid
+    def checkRow(self, board ,colChoice, ROW_COUNT):
+        for rowNum in range(ROW_COUNT):
+            if board[rowNum][colChoice] == 0:
+                return rowNum
+
+    def makeMove(self, colChoice):
+        row = model.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
+        model.getBoard()[row][colChoice] = self.playerValue
+        self.moveCount += 1
+
+        if model.winnerExists():
+            print("Winner!")
+            return False
+
+        if self.playerValue == 1:
+            self.playerValue += 1
+        else:
+            self.playerValue -= 1
+
+        return True
+
+
 
 # Initialize View and Model
 model = Model()
@@ -60,39 +100,32 @@ class Controller:
 
 
     def textView(self):
-        #Build Board
-        ROW_COUNT = 6
-        COL_COUNT = 7
         run = True
-        playerValue = 1
-        printBoard = ""
-        colChoice = 0
 
-        while(run):
+        #Game Loop
+        while run:
 
-            colChoice = int(view.getUserInput("Which Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
+            #User Input Loop
+            while True:
 
-            if colChoice == 8:
-                break
-            # if colChoice == 9:
-            #     self.gui(master)
+                #Try/Except to make sure user gives valid input
+                try:
+                    view.displayBoard(model.getBoard())
 
-            row = self.checkRow(model.getBoard(), colChoice, ROW_COUNT)
-            model.getBoard()[row][colChoice] = playerValue
-            view.createBoard(model.getBoard(), ROW_COUNT, COL_COUNT, colChoice, printBoard)
-            if playerValue == 1:
-                playerValue += 1
-            else:
-                playerValue -= 1
+                    colChoice = int(
+                        view.getUserInput("Which Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
+                    if colChoice == 8:
+                        break #Continues game
+                    # if colChoice == 9:
+                    #     self.gui(master)
+                    run = model.makeMove(colChoice)
+
+                    break#Exits the User Input Loop
+                except:
+                    print("Please Enter A Valid Column \n")
+                    time.sleep(.5)
 
 
-    #Checking if row is free
-    #Params: Board, col choice, and amount of rows
-    #Returns: Returns the row number if valid
-    def checkRow(self,board,colChoice,ROW_COUNT):
-        for rowNum in range(ROW_COUNT):
-            if board[rowNum][colChoice] == 0:
-                return rowNum
 
     #    Creates the gui
     #    Params: master is the main root
