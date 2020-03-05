@@ -107,9 +107,9 @@ class Controller:
         if option.lower() == "gui":
             self.gui(master)
         else:
-            self.textView()
+            self.textView(master)
 
-    def textView(self):
+    def textView(self,master):
         run = True
 
         #Game Loop
@@ -127,7 +127,8 @@ class Controller:
                     if colChoice == 8:
                         break #Continues game
                     if colChoice == 9:
-                        self.gui(master)
+                        print("made it to 9")
+
                         break
                     run = model.makeMove(colChoice)
 
@@ -263,7 +264,7 @@ class Controller:
     #Returns: Closes the GUI and runs the text view
     def switchToText(self,master):
         master.destroy()
-        self.textView()
+        self.textView(master)
 
     # Closes the GUI
     # Params: Master represents the root
