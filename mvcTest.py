@@ -5,23 +5,98 @@ import tkinter.messagebox
 
 #Text-Based and GUI
 class View:
+    def __init__(self):
+        pass
 
+    #Use this to get user text input
+    def getUserInput(self, message):
+        userInput = input(message)
+        return userInput
+
+    #Params: board, row count, col count, user col choice, and
+    #Return: Returns nothing prints out the gameboard
+    def createBoard(self,board,ROW_COUNT, COL_COUNT, colChoice, printBoard):
+        boardRotate = board[::-1]
+        for r in range(ROW_COUNT):
+
+            for c in range(COL_COUNT):
+                printBoard += "|" + str(boardRotate[r][c])
+            printBoard += "|\n"
+        print(printBoard)
+
+#Handle Connecting view and model
+#Should probally move switchView to here
+
+#Handle Logic
+#This is where the board is created and stored during runtime.
+class Model:
+
+    __board = [[0] * 7 for r in range(6)]
+
+    def __init__(self):
+        pass
+
+    def getBoard(self):
+        return self.__board
+    def setBoard(self):
+        self.board = [[0] * 7 for r in range(6)]
+        return self.board
+
+# Initialize View and Model
+model = Model()
+view = View()
+
+class Controller:
     #Main method
-    def __init__(self,master):
-        #Just testing classes
-        con = Controller()
+    def __init__(self, master):
         #print(con.setBoard())
 
-        #Shoudl be moved to controller
-        option = input("Type text or gui for your version of Connect Four")
-
+        #Starting the game
+        option = view.getUserInput("Type text or gui for your version of Connect Four\n")
         if option == "gui" or option == "GUI" or option == "Gui":
             self.gui(master)
         else:
             self.textView()
-    #Creates the gui
-    #Params: master is the main root
-    #Returns: Creates a gui
+
+
+    def textView(self):
+        #Build Board
+        ROW_COUNT = 6
+        COL_COUNT = 7
+        run = True
+        playerValue = 1
+        printBoard = ""
+        colChoice = 0
+
+        while(run):
+
+            colChoice = int(view.getUserInput("Which Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
+
+            if colChoice == 8:
+                break
+            # if colChoice == 9:
+            #     self.gui(master)
+
+            row = self.checkRow(model.getBoard(), colChoice, ROW_COUNT)
+            model.getBoard()[row][colChoice] = playerValue
+            view.createBoard(model.getBoard(), ROW_COUNT, COL_COUNT, colChoice, printBoard)
+            if playerValue == 1:
+                playerValue += 1
+            else:
+                playerValue -= 1
+
+
+    #Checking if row is free
+    #Params: Board, col choice, and amount of rows
+    #Returns: Returns the row number if valid
+    def checkRow(self,board,colChoice,ROW_COUNT):
+        for rowNum in range(ROW_COUNT):
+            if board[rowNum][colChoice] == 0:
+                return rowNum
+
+    #    Creates the gui
+    #    Params: master is the main root
+    #    Returns: Creates a gui
     def gui(self,master):
         header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
         Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=2)
@@ -89,77 +164,9 @@ class View:
     #Runs the text view
     #Params: None
     #Returns: Creates the text view board
-    def textView(self):
-        #Build Board
-        ROW_COUNT = 6
-        COL_COUNT = 7
-        board = [[0] * COL_COUNT for r in range(ROW_COUNT)]
-        run = True
-        playerValue = 1
-        printBoard = ""
-        colChoice = 0
-
-        while(run):
-            self.createBoard(board,ROW_COUNT,COL_COUNT, colChoice,printBoard)
-            colChoice = int(input("Select a Column 0,1,2,3,4,5,6, or select 8 to quit or 9 to switch to the GUI "))
-
-            if colChoice == 8:
-                break
-            # if colChoice == 9:
-            #     self.gui(master)
-
-            if playerValue == 1:
-                row = self.checkRow(board,colChoice,ROW_COUNT)
-                board[row][colChoice] = playerValue
-                self.createBoard(board,ROW_COUNT, COL_COUNT, colChoice,printBoard)
-                playerValue += 1
-            else:
-                row = self.checkRow(board, colChoice, ROW_COUNT)
-                board[row][colChoice] = playerValue
-                self.createBoard(board, ROW_COUNT, COL_COUNT, colChoice,printBoard)
-                playerValue -= 1
-
-
-            print(board)
-    #Initialize and Create board
-    #Params: board, row count, col count, user col choice, and
-    #Return: Returns nothing prints out the gameboard
-    def createBoard(self,board,ROW_COUNT, COL_COUNT, colChoice, printBoard):
-        boardRotate = board[::-1]
-        for r in range(ROW_COUNT):
-
-            for c in range(COL_COUNT):
-                printBoard += "|" + str(boardRotate[r][c])
-            printBoard += "|\n"
-        print(printBoard)
-    #Checking if row is free
-    #Params: Board, col choice, and amount of rows
-    #Returns: Returns the row number if valid
-    def checkRow(self,board,colChoice,ROW_COUNT):
-        for rowNum in range(ROW_COUNT):
-            if board[rowNum][colChoice] == 0:
-                return rowNum
-
-#Handle Connecting view and model
-#Should probally move switchView to here
-class Controller:
-
-    def __init__(self):
-        pass
-
-    def getBoard(self):
-        return self.board
-    def setBoard(self):
-        self.board = [[0] * 7 for r in range(6)]
-        return self.board
-
-#Handle Logic
-class Model:
-
-    def __init__(self):
-        pass
 
 #Starts Tkinter window and runs in loop until user exits
+
 root = Tk()
-start = View(root)
+start = Controller(root)
 root.mainloop()
