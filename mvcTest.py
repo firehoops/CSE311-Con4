@@ -9,7 +9,11 @@ class View:
     def __init__(self):
         self.ROW_COUNT = 6
         self.COL_COUNT = 7
-
+    def redoGui(self):
+        reRoot = tk()
+        restart = Controller(reRoot)
+        restart.gui(reRoot)
+        reRoot.mainloop()
     #Use this to get user text input
     def getUserInput(self, message):
         userInput = input(message)
@@ -111,6 +115,8 @@ class Controller:
             self.gui(master)
         else:
             self.textView(master)
+        if option == "redo":
+            view.redoGui()
 
     def textView(self,master):
         run = True
@@ -130,8 +136,8 @@ class Controller:
                     if colChoice == 8:
                         break #Continues game
                     if colChoice == 9:
-                        print("made it to 9")
-                        self.gui(master)
+                        #Supposed to bring window back up
+                        master.deiconify()
                         break
                     run = model.makeMove(colChoice)
 
@@ -278,7 +284,7 @@ class Controller:
     #Params: Master represents the root
     #Returns: Closes the GUI and runs the text view
     def switchToText(self,master):
-        master.destroy()
+        master.withdraw()
         self.textView(master)
 
     # Closes the GUI
