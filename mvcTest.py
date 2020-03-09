@@ -9,11 +9,6 @@ class View:
     def __init__(self):
         self.ROW_COUNT = 6
         self.COL_COUNT = 7
-    def redoGui(self):
-        reRoot = tk()
-        restart = Controller(reRoot)
-        restart.gui(reRoot)
-        reRoot.mainloop()
     #Use this to get user text input
     def getUserInput(self, message):
         userInput = input(message)
