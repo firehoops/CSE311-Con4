@@ -4,13 +4,16 @@ import tkinter.messagebox
 import time
 import os
 
-
-
 #Text-Based and GUI
 class View:
     def __init__(self):
         self.ROW_COUNT = 6
         self.COL_COUNT = 7
+
+    #Use this to get user text input
+    def getUserInput(self, message):
+        userInput = input(message)
+        return userInput
 
     #Params: board, row count, col count, user col choice, and
     #Return: Returns nothing prints out the gameboard
@@ -66,12 +69,14 @@ class Model:
         for rowNum in range(ROW_COUNT):
             if board[rowNum][colChoice] == 0:
                 return rowNum
-    #def addToBoard(self, board,colChoice):
 
     def makeMove(self, colChoice):
-        row = self.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
-        self.getBoard()[row][colChoice] = self.playerValue
+        row = model.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
+        model.getBoard()[row][colChoice] = self.playerValue
         self.moveCount += 1
+
+        if self.moveCount == 43:
+            print("No Winner")
 
         if model.winnerExists():
             print("Winner!")
@@ -101,13 +106,13 @@ class Controller:
         self.coords_col_6 = [500, 500, 600, 600]
         self.coords_col_7 = [600, 500, 700, 600]
         #Starting the game
-        option = self.getUserInput("Type text or gui for your version of Connect Four\n")
+        option = view.getUserInput("Type text or gui for your version of Connect Four\n")
         if option.lower() == "gui":
-            self.gui(master,c)
+            self.gui(master)
         else:
-            self.textView(master,c)
+            self.textView(master)
 
-    def textView(self,master,c):
+    def textView(self,master):
         run = True
 
         #Game Loop
@@ -121,15 +126,14 @@ class Controller:
                     view.displayBoard(model.getBoard())
 
                     colChoice = int(
-                        model.getUserInput("Which Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
+                        view.getUserInput("Which Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
                     if colChoice == 8:
-                        run = False
-                        return False #Continues game
+                        break #Continues game
                     if colChoice == 9:
-                        model.gui(master,c)
-
-                    #self.addPiece(colChoice)
-                    run = model.addPiece(colChoice)
+                        print("made it to 9")
+                        self.gui(master)
+                        break
+                    run = model.makeMove(colChoice)
 
                     break#Exits the User Input Loop
                 except:
@@ -137,28 +141,16 @@ class Controller:
                     time.sleep(.5)
         exit()
 
-        # ***Controller?
-        # Use this to get user text input
-    def getUserInput(self, message):
-        userInput = input(message)
-        return userInput
-
-
-
-
     #Creates the gui
     #Params: master is the main root
     #Returns: Creates a gui
-    def gui(self,master,c):
+    def gui(self,master):
 
         header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
-        Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=2)
-
-        # Tracking player
-        player1 = True
-        run = True
+        Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
 
         # Main Canvas that board will be created and played on
+        c = Canvas(master, width=700, height=600, bg="gray")
 
         # Create Seperation from Board to have buttons and exit/switch view buttons
         bottomFrame = Frame(master, width=700, height=200)
@@ -166,106 +158,122 @@ class Controller:
         c.grid(row=1, column=0, rowspan=6, columnspan=7)
 
         colTracker = [*range(7)]
-        if player1:
-            Button(bottomFrame, text="Row 1", command=lambda: \
-                self.addPiece(c, player1, colTracker[0])).grid( row=9, column=0, sticky=E)
-            Button(bottomFrame, text="Row 2", command=lambda: \
-                self.addPiece(c, player1, colTracker[1])).grid(row=9, column=1, sticky=E)
-            Button(bottomFrame, text="Row 3",command=lambda: \
-                self.addPiece(c, player1,colTracker[2])).grid(row=9, column=2, sticky=E)
-            Button(bottomFrame, text="Row 4", command=lambda: \
-                self.addPiece(c, player1, colTracker[3])).grid(row=9, column=3, sticky=E)
-            Button(bottomFrame, text="Row 5", command=lambda: \
-                self.addPiece(c, player1, colTracker[4])).grid(row=9, column=4, sticky=E)
-            Button(bottomFrame, text="Row 6", command=lambda: \
-                self.addPiece(c, player1, colTracker[5])).grid(row=9, column=5, sticky=E)
-            Button(bottomFrame, text="Row 7", command=lambda: \
-                self.addPiece(c, player1, colTracker[6])).grid(row=9, column=6, sticky=E)
 
-            Button(bottomFrame, text="Exit", command=lambda: self.quit(master)).grid(row=9, column=7, sticky=E)
-            Button(bottomFrame, text="Switch Views", command=lambda: self.switchToText(master)).grid(row=9, column=8, sticky=E)
+        Button(bottomFrame, text="Row 1", command=lambda: \
+            self.addPiece(c, colTracker[0])).grid( row=9, column=0, sticky=E)
+        Button(bottomFrame, text="Row 2", command=lambda: \
+            self.addPiece(c, colTracker[1])).grid(row=9, column=1, sticky=E)
+        Button(bottomFrame, text="Row 3",command=lambda: \
+            self.addPiece(c,colTracker[2])).grid(row=9, column=2, sticky=E)
+        Button(bottomFrame, text="Row 4", command=lambda: \
+            self.addPiece(c, colTracker[3])).grid(row=9, column=3, sticky=E)
+        Button(bottomFrame, text="Row 5", command=lambda: \
+            self.addPiece(c, colTracker[4])).grid(row=9, column=4, sticky=E)
+        Button(bottomFrame, text="Row 6", command=lambda: \
+            self.addPiece(c, colTracker[5])).grid(row=9, column=5, sticky=E)
+        Button(bottomFrame, text="Row 7", command=lambda: \
+            self.addPiece(c, colTracker[6])).grid(row=9, column=6, sticky=E)
+
+        Button(bottomFrame, text="Exit", command=lambda: self.quit(master)).grid(row=9, column=7, sticky=E)
+        Button(bottomFrame, text="Switch Views", command=lambda: self.switchToText(master)).grid(row=9, column=8, sticky=E)
 
     #Adds a piece to the board
     #Params:Canvas, Boolean player value, col which was selected
     #Returns: Creates a piece on the board
-    def addPiece(self,canvas, player1, colChoice):
+    def addPiece(self,canvas, col):
         #Starting coord for row 1 , x0 =5 , y0 = 500 , x1 = 105 , y1= 600
-
-
-        if colChoice == 0:
-            if player1:
+        if col == 0:
+            if model.playerValue == 1:
                 canvas.create_oval(self.coords_col_1[0], self.coords_col_1[1], self.coords_col_1[2], self.coords_col_1[3], fill="black")
 
                 self.coords_col_1[1] -= 100
                 self.coords_col_1[3] -= 100
-                model.makeMove(colChoice)
-
+                model.makeMove(col)
 
             else:
                 canvas.create_oval(self.coords_col_1[0], self.coords_col_1[1], self.coords_col_1[2], self.coords_col_1[3], fill="red")
-        if colChoice == 1:
-            if player1:
+                self.coords_col_1[1] -= 100
+                self.coords_col_1[3] -= 100
+                model.makeMove(col)
+        if col == 1:
+            if model.playerValue == 1:
                 canvas.create_oval(self.coords_col_2[0], self.coords_col_2[1], self.coords_col_2[2], self.coords_col_2[3], fill="black")
-                # self.coords_col_1[0] -= 100
+
                 self.coords_col_2[1] -= 100
-                # self.coords_col_1[2] -= 100
                 self.coords_col_2[3] -= 100
-                model.makeMove(colChoice)
+                model.makeMove(col)
             else:
                 canvas.create_oval(self.coords_col_2[0], self.coords_col_2[1], self.coords_col_2[2], self.coords_col_2[3], fill="red")
-        if colChoice == 2:
-            if player1:
+                self.coords_col_2[1] -= 100
+                self.coords_col_2[3] -= 100
+                model.makeMove(col)
+        if col == 2:
+            if model.playerValue == 1:
                 canvas.create_oval(self.coords_col_3[0], self.coords_col_3[1], self.coords_col_3[2], self.coords_col_3[3], fill="black")
-                # self.coords_col_1[0] -= 100
+
                 self.coords_col_3[1] -= 100
-                # self.coords_col_1[2] -= 100
                 self.coords_col_3[3] -= 100
-                model.makeMove(colChoice)
+                model.makeMove(col)
             else:
                 canvas.create_oval(self.coords_col_3[0], self.coords_col_3[1], self.coords_col_3[2], self.coords_col_3[3], fill="red")
-        if colChoice == 3:
-            if player1:
+
+                self.coords_col_3[1] -= 100
+                self.coords_col_3[3] -= 100
+                model.makeMove(col)
+        if col == 3:
+            if model.playerValue == 1:
                 canvas.create_oval(self.coords_col_4[0], self.coords_col_4[1], self.coords_col_4[2], self.coords_col_4[3], fill="black")
-                # self.coords_col_1[0] -= 100
+
                 self.coords_col_4[1] -= 100
-                # self.coords_col_1[2] -= 100
                 self.coords_col_4[3] -= 100
-                model.makeMove(colChoice)
+                model.makeMove(col)
             else:
                 canvas.create_oval(self.coords_col_4[0], self.coords_col_4[1], self.coords_col_4[2], self.coords_col_4[3], fill="red")
-        if colChoice == 4:
-            if player1:
+
+                self.coords_col_4[1] -= 100
+                self.coords_col_4[3] -= 100
+                model.makeMove(col)
+
+        if col == 4:
+            if model.playerValue == 1:
                 canvas.create_oval(self.coords_col_5[0], self.coords_col_5[1], self.coords_col_5[2], self.coords_col_5[3], fill="black")
-                # self.coords_col_1[0] -= 100
+
                 self.coords_col_5[1] -= 100
-                # self.coords_col_1[2] -= 100
                 self.coords_col_5[3] -= 100
-                model.makeMove(colChoice)
+                model.makeMove(col)
             else:
                 canvas.create_oval(self.coords_col_5[0], self.coords_col_5[1], self.coords_col_5[2], self.coords_col_5[3], fill="red")
-        if colChoice == 5:
-            if player1:
+
+                self.coords_col_5[1] -= 100
+                self.coords_col_5[3] -= 100
+                model.makeMove(col)
+        if col == 5:
+            if model.playerValue == 1:
                 canvas.create_oval(self.coords_col_6[0], self.coords_col_6[1], self.coords_col_6[2],
                                    self.coords_col_6[3], fill="black")
-                # self.coords_col_1[0] -= 100
+
                 self.coords_col_6[1] -= 100
-                # self.coords_col_1[2] -= 100
                 self.coords_col_6[3] -= 100
-                model.makeMove(colChoice)
+                model.makeMove(col)
             else:
                 canvas.create_oval(self.coords_col_6[0], self.coords_col_6[1], self.coords_col_6[2],
                                    self.coords_col_6[3], fill="red")
-        if colChoice == 6:
-            if player1:
+                self.coords_col_6[1] -= 100
+                self.coords_col_6[3] -= 100
+                model.makeMove(col)
+        if col == 6:
+            if model.playerValue == 1:
                 canvas.create_oval(self.coords_col_7[0], self.coords_col_7[1], self.coords_col_7[2], self.coords_col_7[3], fill="black")
-                # self.coords_col_1[0] -= 100
+
                 self.coords_col_7[1] -= 100
-                # self.coords_col_1[2] -= 100
                 self.coords_col_7[3] -= 100
-                model.makeMove(colChoice)
+                model.makeMove(col)
             else:
                 canvas.create_oval(self.coords_col_7[0], self.coords_col_7[1], self.coords_col_7[2], self.coords_col_7[3], fill="red")
 
+                self.coords_col_7[1] -= 100
+                self.coords_col_7[3] -= 100
+                model.makeMove(col)
     #Switches the veiw from the GUI to the text view
     #Params: Master represents the root
     #Returns: Closes the GUI and runs the text view
@@ -283,7 +291,7 @@ class Controller:
     #Returns: Creates the text view board
 
 #Starts Tkinter window and runs in loop until user exits
+
 root = Tk()
 start = Controller(root)
 root.mainloop()
-c = Canvas(root, width=700, height=600, bg="gray")
