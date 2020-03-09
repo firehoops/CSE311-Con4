@@ -73,7 +73,7 @@ class Model:
         row = model.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
         model.getBoard()[row][colChoice] = self.playerValue
         self.moveCount += 1
-
+        #********need a  check that they can't go out of range*****
         if self.moveCount == 43:
             print("No Winner")
 
@@ -119,7 +119,10 @@ class Controller:
         if option.lower() == "gui":
             self.gui(master)
         else:
+            #not pulling up gui for some reason
+            self.gui(master)
             self.textView(master)
+
 
     def textView(self,master):
         run = True
@@ -136,11 +139,11 @@ class Controller:
 
                     colChoice = int(
                         view.getUserInput("Which Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
-                    if colChoice == 8:
+                    if colChoice == 8 or colChoice == 7:
                         break #Continues game
                     if colChoice == 9:
                         #Supposed to bring window back up
-                        master.deiconify()
+                        root.deiconify()
                         break
                     run = model.makeMove(colChoice)
 
@@ -287,7 +290,7 @@ class Controller:
     #Params: Master represents the root
     #Returns: Closes the GUI and runs the text view
     def switchToText(self,master):
-        master.withdraw()
+        root.withdraw()
         self.textView(master)
 
     # Closes the GUI

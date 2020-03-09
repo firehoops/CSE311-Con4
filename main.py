@@ -158,9 +158,6 @@ class Controller:
         header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
         Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
 
-        # Main Canvas that board will be created and played on
-
-
         # Create Seperation from Board to have buttons and exit/switch view buttons
 
         self.bottomFrame.grid(row=8, columnspan=7)
