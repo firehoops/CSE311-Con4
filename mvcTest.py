@@ -114,13 +114,14 @@ class Controller:
         self.coords_col_5 = [400, 500, 500, 600]
         self.coords_col_6 = [500, 500, 600, 600]
         self.coords_col_7 = [600, 500, 700, 600]
-        self.c = Canvas(master, width=700, height=600, bg="gray")
-        self.bottomFrame = Frame(master, width=700, height=200)
-
+        self.c = Canvas(master, width=700, height=600, bg="lightsky blue")
+        self.buttonFrame = Frame(master, width=700, height=200)
+        self.playerScoreFrame = Frame(master, width=700, height=50)
+        self.bottomFrame = Frame(master, width=700, height=50)
         # Starting the game
         option = view.getUserInput("Type text or gui for your version of Connect Four\n")
         if option.lower() == "gui":
-            self.gui(master, option)
+            self.gui(master)
         if option == "txt":
             self.textView(master)
         # else:
@@ -128,39 +129,38 @@ class Controller:
     # Creates the gui
     # Params: master is the main root
     # Returns: Creates a gui
-    def gui(self, master, option):
+    def gui(self, master):
 
         header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
-        Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
+        Label(master, text="Connect Four", anchor=N, font=header, bg = "royalblue1").grid(row=0, column=2, columnspan=3)
 
         # Create Seperation from Board to have buttons and exit/switch view buttons
-        self.bottomFrame.grid(row=8,column=0, columnspan=7)
         self.c.grid(row=1, column=0, rowspan=6, columnspan=7)
-
-
-
+        self.buttonFrame.grid(row=8, column=0, columnspan=7)
+        self.playerScoreFrame.grid(row=9, column=0, columnspan=7)
+        self.bottomFrame.grid(row=10, column=0, columnspan=7)
         colTracker = [*range(7)]
 
-        Button(self.bottomFrame, text="Row 1", relief = "groove",command=lambda: \
-            self.addPiece(colTracker[0])).grid(row=9, column=0, padx = 5)
-        Button(self.bottomFrame, text="Row 2", relief = "groove",command=lambda: \
-            self.addPiece(colTracker[1])).grid(row=9, column=1, padx =5)
-        Button(self.bottomFrame, text="Row 3", relief = "groove",command=lambda: \
-            self.addPiece(colTracker[2])).grid(row=9, column=2, padx =5)
-        Button(self.bottomFrame, text="Row 4", relief = "groove",command=lambda: \
-            self.addPiece(colTracker[3])).grid(row=9, column=3, padx =5)
-        Button(self.bottomFrame, text="Row 5", relief = "groove",command=lambda: \
-            self.addPiece(colTracker[4])).grid(row=9, column=4, padx =5)
-        Button(self.bottomFrame, text="Row 6", relief = "groove",command=lambda: \
-            self.addPiece(colTracker[5])).grid(row=9, column=5, padx =5)
-        Button(self.bottomFrame, text="Row 7", relief = "groove",command=lambda: \
-            self.addPiece(colTracker[6])).grid(row=9, column=6, padx =5)
+        Button(self.buttonFrame, text="Row 1", relief = "groove", width= 12,command=lambda: \
+            self.addPiece(colTracker[0])).grid(row=8, column=0, padx = 3)
+        Button(self.buttonFrame, text="Row 2", relief = "groove",width= 12,command=lambda: \
+            self.addPiece(colTracker[1])).grid(row=8, column=1, padx =3)
+        Button(self.buttonFrame, text="Row 3", relief = "groove",width= 12,command=lambda: \
+            self.addPiece(colTracker[2])).grid(row=8, column=2, padx =3)
+        Button(self.buttonFrame, text="Row 4", relief = "groove",width= 12,command=lambda: \
+            self.addPiece(colTracker[3])).grid(row=8, column=3, padx =3)
+        Button(self.buttonFrame, text="Row 5", relief = "groove",width= 12,command=lambda: \
+            self.addPiece(colTracker[4])).grid(row=8, column=4, padx =3)
+        Button(self.buttonFrame, text="Row 6", relief = "groove",width= 12,command=lambda: \
+            self.addPiece(colTracker[5])).grid(row=8, column=5, padx =3)
+        Button(self.buttonFrame, text="Row 7", relief = "groove",width= 12,command=lambda: \
+            self.addPiece(colTracker[6])).grid(row=8, column=6, padx =3)
 
-        Button(self.bottomFrame, text="Exit", relief = "groove",command=lambda: self.quit(master)).grid(row=9, column=7, padx =5)
-        Button(self.bottomFrame, text="Switch Views", relief = "groove",command=lambda: self.switchToText(master)).grid(row=9,column=8,padx =5)
+        Label(master, text = model.playerValue).grid(row = 9, column = 4)
+        Button(self.bottomFrame, text="Exit", relief = "groove",width=15,command=lambda: self.quit(master)).grid(row=10, column=2, pady = 30, padx = 15)
+        Button(self.bottomFrame, text="Switch Views", relief = "groove",width= 15,command=lambda: self.switchToText(master)).grid(row=10,column=4)
 
-        if option.lower() != "gui":
-            self.textView(master)
+
     def textView(self,master):
         run = True
         #Game Loop
