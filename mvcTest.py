@@ -114,15 +114,18 @@ class Controller:
         self.coords_col_7 = [600, 500, 700, 600]
         self.c = Canvas(master, width=700, height=600, bg="gray")
         self.bottomFrame = Frame(master, width=700, height=200)
-        #Starting the game
+
+
+    def startGame(self,master):
+        # Starting the game
         option = view.getUserInput("Type text or gui for your version of Connect Four\n")
         if option.lower() == "gui":
             self.gui(master)
+
         else:
-            #not pulling up gui for some reason
+            # not pulling up gui for some reason
             self.gui(master)
             self.textView(master)
-
 
     def textView(self,master):
         run = True
@@ -172,7 +175,7 @@ class Controller:
         colTracker = [*range(7)]
 
         Button(self.bottomFrame, text="Row 1", command=lambda: \
-            self.addPiece(colTracker[0])).grid( row=9, column=0, sticky=E)
+            self.addPiece(colTracker[0])).grid( row=9, column=0)
         Button(self.bottomFrame, text="Row 2", command=lambda: \
             self.addPiece(colTracker[1])).grid(row=9, column=1, sticky=E)
         Button(self.bottomFrame, text="Row 3",command=lambda: \
@@ -303,7 +306,19 @@ class Controller:
     #Returns: Creates the text view board
 
 #Starts Tkinter window and runs in loop until user exits
+class main:
+        def __init__(self):
 
-root = Tk()
-start = Controller(root)
-root.mainloop()
+            self.root = Tk()
+            self.model = Model()
+            self.view = View()
+            self.controller = Controller(self.root)
+            self.root.mainloop()
+
+            self.controller.startGame(self.root)
+
+        def newWindow(self):
+            newWin  = TopFrame(self.root)
+            Label(newWin, text ="test")
+
+main = main()
