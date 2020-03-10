@@ -134,30 +134,30 @@ class Controller:
         Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
 
         # Create Seperation from Board to have buttons and exit/switch view buttons
-        self.bottomFrame.grid(row=8, columnspan=7)
+        self.bottomFrame.grid(row=8,column=0, columnspan=7)
         self.c.grid(row=1, column=0, rowspan=6, columnspan=7)
 
 
 
         colTracker = [*range(7)]
 
-        Button(self.bottomFrame, text="Row 1", command=lambda: \
-            self.addPiece(colTracker[0])).grid(row=9, column=0)
-        Button(self.bottomFrame, text="Row 2", command=lambda: \
-            self.addPiece(colTracker[1])).grid(row=9, column=1, sticky=E)
-        Button(self.bottomFrame, text="Row 3", command=lambda: \
-            self.addPiece(colTracker[2])).grid(row=9, column=2, sticky=E)
-        Button(self.bottomFrame, text="Row 4", command=lambda: \
-            self.addPiece(colTracker[3])).grid(row=9, column=3, sticky=E)
-        Button(self.bottomFrame, text="Row 5", command=lambda: \
-            self.addPiece(colTracker[4])).grid(row=9, column=4, sticky=E)
-        Button(self.bottomFrame, text="Row 6", command=lambda: \
-            self.addPiece(colTracker[5])).grid(row=9, column=5, sticky=E)
-        Button(self.bottomFrame, text="Row 7", command=lambda: \
-            self.addPiece(colTracker[6])).grid(row=9, column=6, sticky=E)
+        Button(self.bottomFrame, text="Row 1", relief = "groove",command=lambda: \
+            self.addPiece(colTracker[0])).grid(row=9, column=0, padx = 5)
+        Button(self.bottomFrame, text="Row 2", relief = "groove",command=lambda: \
+            self.addPiece(colTracker[1])).grid(row=9, column=1, padx =5)
+        Button(self.bottomFrame, text="Row 3", relief = "groove",command=lambda: \
+            self.addPiece(colTracker[2])).grid(row=9, column=2, padx =5)
+        Button(self.bottomFrame, text="Row 4", relief = "groove",command=lambda: \
+            self.addPiece(colTracker[3])).grid(row=9, column=3, padx =5)
+        Button(self.bottomFrame, text="Row 5", relief = "groove",command=lambda: \
+            self.addPiece(colTracker[4])).grid(row=9, column=4, padx =5)
+        Button(self.bottomFrame, text="Row 6", relief = "groove",command=lambda: \
+            self.addPiece(colTracker[5])).grid(row=9, column=5, padx =5)
+        Button(self.bottomFrame, text="Row 7", relief = "groove",command=lambda: \
+            self.addPiece(colTracker[6])).grid(row=9, column=6, padx =5)
 
-        Button(self.bottomFrame, text="Exit", command=lambda: self.quit(master)).grid(row=9, column=7, sticky=E)
-        Button(self.bottomFrame, text="Switch Views", command=lambda: self.switchToText(master)).grid(row=9,column=8,sticky=E)
+        Button(self.bottomFrame, text="Exit", relief = "groove",command=lambda: self.quit(master)).grid(row=9, column=7, padx =5)
+        Button(self.bottomFrame, text="Switch Views", relief = "groove",command=lambda: self.switchToText(master)).grid(row=9,column=8,padx =5)
 
         if option.lower() != "gui":
             self.textView(master)
