@@ -82,10 +82,12 @@ class Model:
             start.bottomFrame.grid_forget()
             header = tkinter.font.Font(size=40, weight=tkinter.font.BOLD)
             if self.playerValue == 1:
+                time.sleep(.75)
                 lab = Label(root, text = "Player 1 is the Winner!!",font = header).grid(row = 2, column = 2, rowspan = 4, columnspan = 4)
                 print("Player 1 is the Winner!!")
                 return False
             else:
+                time.sleep(.75)
                 lab = Label(root, text="Player 2 is the Winner!!", font=header).grid(row=2, column=2, rowspan=4, columnspan=4)
                 print("Player 2 is the Winner!!")
                 return False
@@ -115,21 +117,52 @@ class Controller:
         self.c = Canvas(master, width=700, height=600, bg="gray")
         self.bottomFrame = Frame(master, width=700, height=200)
 
-
-    def startGame(self,master):
         # Starting the game
         option = view.getUserInput("Type text or gui for your version of Connect Four\n")
         if option.lower() == "gui":
-            self.gui(master)
-
-        else:
-            # not pulling up gui for some reason
-            self.gui(master)
+            self.gui(master, option)
+        if option == "txt":
             self.textView(master)
+        # else:
+        #     self.textView(master)
+    # Creates the gui
+    # Params: master is the main root
+    # Returns: Creates a gui
+    def gui(self, master, option):
 
+        header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
+        Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
+
+        # Create Seperation from Board to have buttons and exit/switch view buttons
+        self.bottomFrame.grid(row=8, columnspan=7)
+        self.c.grid(row=1, column=0, rowspan=6, columnspan=7)
+
+
+
+        colTracker = [*range(7)]
+
+        Button(self.bottomFrame, text="Row 1", command=lambda: \
+            self.addPiece(colTracker[0])).grid(row=9, column=0)
+        Button(self.bottomFrame, text="Row 2", command=lambda: \
+            self.addPiece(colTracker[1])).grid(row=9, column=1, sticky=E)
+        Button(self.bottomFrame, text="Row 3", command=lambda: \
+            self.addPiece(colTracker[2])).grid(row=9, column=2, sticky=E)
+        Button(self.bottomFrame, text="Row 4", command=lambda: \
+            self.addPiece(colTracker[3])).grid(row=9, column=3, sticky=E)
+        Button(self.bottomFrame, text="Row 5", command=lambda: \
+            self.addPiece(colTracker[4])).grid(row=9, column=4, sticky=E)
+        Button(self.bottomFrame, text="Row 6", command=lambda: \
+            self.addPiece(colTracker[5])).grid(row=9, column=5, sticky=E)
+        Button(self.bottomFrame, text="Row 7", command=lambda: \
+            self.addPiece(colTracker[6])).grid(row=9, column=6, sticky=E)
+
+        Button(self.bottomFrame, text="Exit", command=lambda: self.quit(master)).grid(row=9, column=7, sticky=E)
+        Button(self.bottomFrame, text="Switch Views", command=lambda: self.switchToText(master)).grid(row=9,column=8,sticky=E)
+
+        if option.lower() != "gui":
+            self.textView(master)
     def textView(self,master):
         run = True
-
         #Game Loop
         while run:
 
@@ -146,7 +179,10 @@ class Controller:
                         break #Continues game
                     if colChoice == 9:
                         #Supposed to bring window back up
-                        root.deiconify()
+                        self.createNewWindow(master)
+                        # root.iconify()
+                        # root.update()
+                        # root.deiconify()
                         break
                     run = model.makeMove(colChoice)
 
@@ -155,42 +191,15 @@ class Controller:
                     print("Please Enter A Valid Column \n")
                     time.sleep(.5)
         exit()
-
-    #Creates the gui
-    #Params: master is the main root
-    #Returns: Creates a gui
-    def gui(self,master):
-
+    def createNewWindow(self,master):
+        master.destroy()
+        work = Tk()
         header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
-        Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
-
-        # Main Canvas that board will be created and played on
-
-
-        # Create Seperation from Board to have buttons and exit/switch view buttons
-
-        self.bottomFrame.grid(row=8, columnspan=7)
-        self.c.grid(row=1, column=0, rowspan=6, columnspan=7)
-
-        colTracker = [*range(7)]
-
-        Button(self.bottomFrame, text="Row 1", command=lambda: \
-            self.addPiece(colTracker[0])).grid( row=9, column=0)
-        Button(self.bottomFrame, text="Row 2", command=lambda: \
-            self.addPiece(colTracker[1])).grid(row=9, column=1, sticky=E)
-        Button(self.bottomFrame, text="Row 3",command=lambda: \
-            self.addPiece(colTracker[2])).grid(row=9, column=2, sticky=E)
-        Button(self.bottomFrame, text="Row 4", command=lambda: \
-            self.addPiece(colTracker[3])).grid(row=9, column=3, sticky=E)
-        Button(self.bottomFrame, text="Row 5", command=lambda: \
-            self.addPiece(colTracker[4])).grid(row=9, column=4, sticky=E)
-        Button(self.bottomFrame, text="Row 6", command=lambda: \
-            self.addPiece(colTracker[5])).grid(row=9, column=5, sticky=E)
-        Button(self.bottomFrame, text="Row 7", command=lambda: \
-            self.addPiece(colTracker[6])).grid(row=9, column=6, sticky=E)
-
-        Button(self.bottomFrame, text="Exit", command=lambda: self.quit(master)).grid(row=9, column=7, sticky=E)
-        Button(self.bottomFrame, text="Switch Views", command=lambda: self.switchToText(master)).grid(row=9, column=8, sticky=E)
+        Label(work, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
+        #temp = self.c
+        #temp.grid(row = 0, column = 1)
+        Label(work, text ="work")
+        work.mainloop()
 
     #Adds a piece to the board
     #Params:Canvas, Boolean player value, col which was selected
@@ -294,7 +303,7 @@ class Controller:
     #Returns: Closes the GUI and runs the text view
     def switchToText(self,master):
         root.withdraw()
-        self.textView(master)
+        self.textView()
 
     # Closes the GUI
     # Params: Master represents the root
@@ -306,19 +315,11 @@ class Controller:
     #Returns: Creates the text view board
 
 #Starts Tkinter window and runs in loop until user exits
-class main:
-        def __init__(self):
 
-            self.root = Tk()
-            self.model = Model()
-            self.view = View()
-            self.controller = Controller(self.root)
-            self.root.mainloop()
+def newWindow(master):
+    newWin  = Toplevel(master)
+    Label(newWin, text ="test")
 
-            self.controller.startGame(self.root)
-
-        def newWindow(self):
-            newWin  = TopFrame(self.root)
-            Label(newWin, text ="test")
-
-main = main()
+root = Tk()
+start = Controller(root)
+root.mainloop()

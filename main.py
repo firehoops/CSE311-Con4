@@ -73,7 +73,7 @@ class Model:
         row = model.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
         model.getBoard()[row][colChoice] = self.playerValue
         self.moveCount += 1
-
+        #********need a  check that they can't go out of range*****
         if self.moveCount == 43:
             print("No Winner")
 
@@ -82,10 +82,12 @@ class Model:
             start.bottomFrame.grid_forget()
             header = tkinter.font.Font(size=40, weight=tkinter.font.BOLD)
             if self.playerValue == 1:
+                time.sleep(.75)
                 lab = Label(root, text = "Player 1 is the Winner!!",font = header).grid(row = 2, column = 2, rowspan = 4, columnspan = 4)
                 print("Player 1 is the Winner!!")
                 return False
             else:
+                time.sleep(.75)
                 lab = Label(root, text="Player 2 is the Winner!!", font=header).grid(row=2, column=2, rowspan=4, columnspan=4)
                 print("Player 2 is the Winner!!")
                 return False
@@ -114,12 +116,14 @@ class Controller:
         self.coords_col_7 = [600, 500, 700, 600]
         self.c = Canvas(master, width=700, height=600, bg="gray")
         self.bottomFrame = Frame(master, width=700, height=200)
-        #Starting the game
+
+        # Starting the game
         option = view.getUserInput("Type text or gui for your version of Connect Four\n")
         if option.lower() == "gui":
             self.gui(master)
         else:
             self.textView(master)
+
 
     def textView(self,master):
         run = True
@@ -136,11 +140,11 @@ class Controller:
 
                     colChoice = int(
                         view.getUserInput("Which Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
-                    if colChoice == 8:
+                    if colChoice == 8 or colChoice == 7:
                         break #Continues game
                     if colChoice == 9:
                         #Supposed to bring window back up
-                        master.deiconify()
+                        root.deiconify()
                         break
                     run = model.makeMove(colChoice)
 
@@ -158,6 +162,9 @@ class Controller:
         header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
         Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
 
+        # Main Canvas that board will be created and played on
+
+
         # Create Seperation from Board to have buttons and exit/switch view buttons
 
         self.bottomFrame.grid(row=8, columnspan=7)
@@ -166,7 +173,7 @@ class Controller:
         colTracker = [*range(7)]
 
         Button(self.bottomFrame, text="Row 1", command=lambda: \
-            self.addPiece(colTracker[0])).grid( row=9, column=0, sticky=E)
+            self.addPiece(colTracker[0])).grid( row=9, column=0)
         Button(self.bottomFrame, text="Row 2", command=lambda: \
             self.addPiece(colTracker[1])).grid(row=9, column=1, sticky=E)
         Button(self.bottomFrame, text="Row 3",command=lambda: \
@@ -284,7 +291,7 @@ class Controller:
     #Params: Master represents the root
     #Returns: Closes the GUI and runs the text view
     def switchToText(self,master):
-        master.withdraw()
+        root.withdraw()
         self.textView(master)
 
     # Closes the GUI
@@ -297,6 +304,10 @@ class Controller:
     #Returns: Creates the text view board
 
 #Starts Tkinter window and runs in loop until user exits
+
+def newWindow(master):
+    newWin  = Toplevel(master)
+    Label(newWin, text ="test")
 
 root = Tk()
 start = Controller(root)
