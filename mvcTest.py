@@ -132,7 +132,7 @@ class Controller:
     def gui(self, master):
 
         header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
-        Label(master, text="Connect Four", anchor=N, font=header, bg = "royalblue1").grid(row=0, column=2, columnspan=3)
+        Label(master, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
 
         # Create Seperation from Board to have buttons and exit/switch view buttons
         self.c.grid(row=1, column=0, rowspan=6, columnspan=7)
@@ -142,21 +142,21 @@ class Controller:
         colTracker = [*range(7)]
 
         Button(self.buttonFrame, text="Row 1", relief = "groove", width= 12,command=lambda: \
-            self.addPiece(colTracker[0])).grid(row=8, column=0, padx = 3)
+            self.addPiece(colTracker[0],master)).grid(row=8, column=0, padx = 3)
         Button(self.buttonFrame, text="Row 2", relief = "groove",width= 12,command=lambda: \
-            self.addPiece(colTracker[1])).grid(row=8, column=1, padx =3)
+            self.addPiece(colTracker[1],master)).grid(row=8, column=1, padx =3)
         Button(self.buttonFrame, text="Row 3", relief = "groove",width= 12,command=lambda: \
-            self.addPiece(colTracker[2])).grid(row=8, column=2, padx =3)
+            self.addPiece(colTracker[2],master)).grid(row=8, column=2, padx =3)
         Button(self.buttonFrame, text="Row 4", relief = "groove",width= 12,command=lambda: \
-            self.addPiece(colTracker[3])).grid(row=8, column=3, padx =3)
+            self.addPiece(colTracker[3],master)).grid(row=8, column=3, padx =3)
         Button(self.buttonFrame, text="Row 5", relief = "groove",width= 12,command=lambda: \
-            self.addPiece(colTracker[4])).grid(row=8, column=4, padx =3)
+            self.addPiece(colTracker[4],master)).grid(row=8, column=4, padx =3)
         Button(self.buttonFrame, text="Row 6", relief = "groove",width= 12,command=lambda: \
-            self.addPiece(colTracker[5])).grid(row=8, column=5, padx =3)
+            self.addPiece(colTracker[5],master)).grid(row=8, column=5, padx =3)
         Button(self.buttonFrame, text="Row 7", relief = "groove",width= 12,command=lambda: \
-            self.addPiece(colTracker[6])).grid(row=8, column=6, padx =3)
+            self.addPiece(colTracker[6],master)).grid(row=8, column=6, padx =3)
 
-        Label(master, text = model.playerValue).grid(row = 9, column = 4)
+
         Button(self.bottomFrame, text="Exit", relief = "groove",width=15,command=lambda: self.quit(master)).grid(row=10, column=2, pady = 30, padx = 15)
         Button(self.bottomFrame, text="Switch Views", relief = "groove",width= 15,command=lambda: self.switchToText(master)).grid(row=10,column=4)
 
@@ -204,56 +204,61 @@ class Controller:
     #Adds a piece to the board
     #Params:Canvas, Boolean player value, col which was selected
     #Returns: Creates a piece on the board
-    def addPiece(self, col):
+    def addPiece(self, col,master):
         #Starting coord for row 1 , x0 =5 , y0 = 500 , x1 = 105 , y1= 600
+        playerValueFont = tkinter.font.Font(size=15, weight=tkinter.font.BOLD)
+
         if col == 0:
             if model.playerValue == 1:
                 self.c.create_oval(self.coords_col_1[0], self.coords_col_1[1], self.coords_col_1[2], self.coords_col_1[3], fill="black")
-
+                Label(master, text="Player " + str(model.playerValue+1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan = 3)
                 self.coords_col_1[1] -= 100
                 self.coords_col_1[3] -= 100
                 model.makeMove(col)
 
             else:
                 self.c.create_oval(self.coords_col_1[0], self.coords_col_1[1], self.coords_col_1[2], self.coords_col_1[3], fill="red")
+                Label(master, text="Player " + str(model.playerValue-1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan=3)
                 self.coords_col_1[1] -= 100
                 self.coords_col_1[3] -= 100
                 model.makeMove(col)
         if col == 1:
             if model.playerValue == 1:
                 self.c.create_oval(self.coords_col_2[0], self.coords_col_2[1], self.coords_col_2[2], self.coords_col_2[3], fill="black")
-
+                Label(master, text="Player " + str(model.playerValue+1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan = 3)
                 self.coords_col_2[1] -= 100
                 self.coords_col_2[3] -= 100
                 model.makeMove(col)
             else:
                 self.c.create_oval(self.coords_col_2[0], self.coords_col_2[1], self.coords_col_2[2], self.coords_col_2[3], fill="red")
+                Label(master, text="Player " + str(model.playerValue-1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan=3)
+
                 self.coords_col_2[1] -= 100
                 self.coords_col_2[3] -= 100
                 model.makeMove(col)
         if col == 2:
             if model.playerValue == 1:
                 self.c.create_oval(self.coords_col_3[0], self.coords_col_3[1], self.coords_col_3[2], self.coords_col_3[3], fill="black")
-
+                Label(master, text="Player " + str(model.playerValue+1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan = 3)
                 self.coords_col_3[1] -= 100
                 self.coords_col_3[3] -= 100
                 model.makeMove(col)
             else:
                 self.c.create_oval(self.coords_col_3[0], self.coords_col_3[1], self.coords_col_3[2], self.coords_col_3[3], fill="red")
-
+                Label(master, text="Player " + str(model.playerValue-1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan=3)
                 self.coords_col_3[1] -= 100
                 self.coords_col_3[3] -= 100
                 model.makeMove(col)
         if col == 3:
             if model.playerValue == 1:
                 self.c.create_oval(self.coords_col_4[0], self.coords_col_4[1], self.coords_col_4[2], self.coords_col_4[3], fill="black")
-
+                Label(master, text="Player " + str(model.playerValue+1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan = 3)
                 self.coords_col_4[1] -= 100
                 self.coords_col_4[3] -= 100
                 model.makeMove(col)
             else:
                 self.c.create_oval(self.coords_col_4[0], self.coords_col_4[1], self.coords_col_4[2], self.coords_col_4[3], fill="red")
-
+                Label(master, text="Player " + str(model.playerValue-1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan=3)
                 self.coords_col_4[1] -= 100
                 self.coords_col_4[3] -= 100
                 model.makeMove(col)
@@ -261,40 +266,39 @@ class Controller:
         if col == 4:
             if model.playerValue == 1:
                 self.c.create_oval(self.coords_col_5[0], self.coords_col_5[1], self.coords_col_5[2], self.coords_col_5[3], fill="black")
-
+                Label(master, text="Player " + str(model.playerValue+1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan = 3)
                 self.coords_col_5[1] -= 100
                 self.coords_col_5[3] -= 100
                 model.makeMove(col)
             else:
                 self.c.create_oval(self.coords_col_5[0], self.coords_col_5[1], self.coords_col_5[2], self.coords_col_5[3], fill="red")
-
+                Label(master, text="Player " + str(model.playerValue-1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan=3)
                 self.coords_col_5[1] -= 100
                 self.coords_col_5[3] -= 100
                 model.makeMove(col)
         if col == 5:
             if model.playerValue == 1:
-                self.c.create_oval(self.coords_col_6[0], self.coords_col_6[1], self.coords_col_6[2],
-                                   self.coords_col_6[3], fill="black")
-
+                self.c.create_oval(self.coords_col_6[0], self.coords_col_6[1], self.coords_col_6[2],self.coords_col_6[3], fill="black")
+                Label(master, text="Player " + str(model.playerValue+1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan = 3)
                 self.coords_col_6[1] -= 100
                 self.coords_col_6[3] -= 100
                 model.makeMove(col)
             else:
-                self.c.create_oval(self.coords_col_6[0], self.coords_col_6[1], self.coords_col_6[2],
-                                   self.coords_col_6[3], fill="red")
+                self.c.create_oval(self.coords_col_6[0], self.coords_col_6[1], self.coords_col_6[2],self.coords_col_6[3], fill="red")
+                Label(master, text="Player " + str(model.playerValue-1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan=3)
                 self.coords_col_6[1] -= 100
                 self.coords_col_6[3] -= 100
                 model.makeMove(col)
         if col == 6:
             if model.playerValue == 1:
                 self.c.create_oval(self.coords_col_7[0], self.coords_col_7[1], self.coords_col_7[2], self.coords_col_7[3], fill="black")
-
+                Label(master, text="Player " + str(model.playerValue+1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan = 3)
                 self.coords_col_7[1] -= 100
                 self.coords_col_7[3] -= 100
                 model.makeMove(col)
             else:
                 self.c.create_oval(self.coords_col_7[0], self.coords_col_7[1], self.coords_col_7[2], self.coords_col_7[3], fill="red")
-
+                Label(master, text="Player " + str(model.playerValue-1) + " move", font = playerValueFont).grid(row=9, column=2, columnspan=3)
                 self.coords_col_7[1] -= 100
                 self.coords_col_7[3] -= 100
                 model.makeMove(col)
