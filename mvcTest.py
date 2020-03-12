@@ -101,22 +101,24 @@ class Model:
                 print("No Winner")
 
             if model.winnerExists():
+                print("there was a winner")
+                # ***This lines 106-108 causing it to break
                 # start.c.grid_forget()
                 # start.playerScoreFrame.grid_forget()
                 # start.bottomFrame.grid_forget()
-                header = tkinter.font.Font(size=40, weight=tkinter.font.BOLD)
+                #header = tkinter.font.Font(size=40, weight=tkinter.font.BOLD)
                 if self.playerValue == 1:
-                    start.quit()
+                    #start.quit()
                     # time.sleep(.5)
                     # Label(start.root, text="Player 1 is the Winner!!", font=header).grid(row=2, column=2, rowspan=4,columnspan=6)
                     print("Player 1 is the Winner!!")
-                    # return False
+                    return False
                 else:
-                    start.quit()
+                    #start.quit()
                     # time.sleep(.5)
                     # Label(start.root, text="Player 2 is the Winner!!", font=header).grid(row=2, column=2, rowspan=4, columnspan=6)
                     print("Player 2 is the Winner!!")
-                    # return False
+                    return False
 
             if self.playerValue == 1:
                 self.playerValue += 1
@@ -144,6 +146,7 @@ class Controller:
         self.coords_col_5 = [400, 500, 500, 600]
         self.coords_col_6 = [500, 500, 600, 600]
         self.coords_col_7 = [600, 500, 700, 600]
+
         self.root = Tk()
         self.c = Canvas(self.root, width=700, height=600, bg="lightsky blue")
         self.buttonFrame = Frame(self.root, width=700, height=200)
