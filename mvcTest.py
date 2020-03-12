@@ -43,6 +43,7 @@ class Model:
         return self.board
 
     def winnerExists(self):
+
         # Check Horizontal
         for row in range(self.ROW_COUNT):
             for col in range(self.COL_COUNT - 3):
@@ -61,6 +62,25 @@ class Model:
                         and self.board[row + 3][col] == self.playerValue:
                     return True
 
+        # Check Diagonal \
+        for row in range(self.ROW_COUNT - 3):
+            for col in range(self.COL_COUNT - 3):
+                if self.board[row][col] == self.playerValue \
+                        and self.board[row + 1][col + 1] == self.playerValue \
+                        and self.board[row + 2][col + 2] == self.playerValue \
+                        and self.board[row + 3][col + 3] == self.playerValue:
+                    return True
+
+        # Check Diagonal /
+        for row in range(3, self.ROW_COUNT):
+            for col in range(self.COL_COUNT - 3):
+                if self.board[row][col] == self.playerValue \
+                        and self.board[row - 1][col + 1] == self.playerValue \
+                        and self.board[row - 2][col + 2] == self.playerValue \
+                        and self.board[row - 3][col + 3] == self.playerValue:
+                    return True
+
+
     #Checking if row is free
     #Params: Board, col choice, and amount of rows
     #Returns: Returns the row number if valid
@@ -70,33 +90,40 @@ class Model:
                 return rowNum
 
     def makeMove(self, colChoice):
-        row = model.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
-        model.getBoard()[row][colChoice] = self.playerValue
-        self.moveCount += 1
-        #********need a  check that they can't go out of range*****
-        if self.moveCount == 43:
-            print("No Winner")
 
-        if model.winnerExists():
-            start.c.grid_forget()
-            start.bottomFrame.grid_forget()
-            header = tkinter.font.Font(size=40, weight=tkinter.font.BOLD)
+        #Makes sure the column is valid
+        try:
+            row = model.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
+            model.getBoard()[row][colChoice] = self.playerValue
+            self.moveCount += 1
+            #********need a  check that they can't go out of range*****
+            if self.moveCount == 43:
+                print("No Winner")
+
+            if model.winnerExists():
+                #start.c.grid_forget()
+                #start.bottomFrame.grid_forget()
+                header = tkinter.font.Font(size=40, weight=tkinter.font.BOLD)
+                if self.playerValue == 1:
+                    time.sleep(.75)
+                    lab = Label(root, text = "Player 1 is the Winner!!",font = header).grid(row = 2, column = 2, rowspan = 4, columnspan = 4)
+                    print("Player 1 is the Winner!!")
+                    return False
+                else:
+                    time.sleep(.75)
+                    lab = Label(root, text="Player 2 is the Winner!!", font=header).grid(row=2, column=2, rowspan=4, columnspan=4)
+                    print("Player 2 is the Winner!!")
+                    return False
+
             if self.playerValue == 1:
-                time.sleep(.75)
-                lab = Label(root, text = "Player 1 is the Winner!!",font = header).grid(row = 2, column = 2, rowspan = 4, columnspan = 4)
-                print("Player 1 is the Winner!!")
-                return False
+                self.playerValue += 1
             else:
-                time.sleep(.75)
-                lab = Label(root, text="Player 2 is the Winner!!", font=header).grid(row=2, column=2, rowspan=4, columnspan=4)
-                print("Player 2 is the Winner!!")
-                return False
-
-        if self.playerValue == 1:
-            self.playerValue += 1
-        else:
-            self.playerValue -= 1
-        return True
+                self.playerValue -= 1
+            return True
+        except:
+            print("Please Enter A Valid Column \n")
+            time.sleep(.5)
+            return True
 
 
 
@@ -170,7 +197,7 @@ class Controller:
             while True:
 
                 #Try/Except to make sure user gives valid input
-                try:
+                #try:
                     view.displayBoard(model.getBoard())
 
                     colChoice = int(
@@ -186,10 +213,10 @@ class Controller:
                         break
                     run = model.makeMove(colChoice)
 
-                    break#Exits the User Input Loop
-                except:
-                    print("Please Enter A Valid Column \n")
-                    time.sleep(.5)
+                    break #Exits the User Input Loop
+                #except:
+                    #print("Please Enter A Valid Column \n")
+                    #time.sleep(.5)
         exit()
     def createNewWindow(self,master):
         master.destroy()
