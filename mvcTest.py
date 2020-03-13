@@ -10,12 +10,14 @@ class View:
     def __init__(self):
         self.ROW_COUNT = 6
         self.COL_COUNT = 7
-    #Use this to get user text input
+
+    # Params: Message - takes in the user input message
+    # Return: returns the userinput as a string
     def getUserInput(self, message):
         userInput = input(message)
         return userInput
 
-    #Params: board, row count, col count, user col choice, and
+    #Params: board - takes in the game board
     #Return: Returns nothing prints out the gameboard
     def displayBoard(self,board):
         printBoard = ""
@@ -28,7 +30,6 @@ class View:
         print(printBoard)
 
 #Handle Logic
-#This is where the board is created and stored during runtime.
 class Model:
 
     def __init__(self):
@@ -43,6 +44,7 @@ class Model:
     def getBoard(self):
         return self.board
 
+    #Returns true if a one of the players has 4 pieces vertically, horizontally, or diagonally.
     def winnerExists(self):
 
         # Check Horizontal
@@ -83,18 +85,19 @@ class Model:
 
 
     #Checking if row is free
-    #Params: Board, col choice, and amount of rows
-    #Returns: Returns the row number if valid
-    def checkRow(self, board ,colChoice, ROW_COUNT):
-        for rowNum in range(ROW_COUNT):
+    #Params: Board - the game board, colChoice - users selected col , and amount of rows
+    #Returns: Returns the row number if valid by checking each row in that col and seeing if there is an open space indicated by a 0
+    def checkRow(self, board ,colChoice):
+        for rowNum in range(self.ROW_COUNT):
             if board[rowNum][colChoice] == 0:
                 return rowNum
-
+    #Params: colChoice - user selected col
+    #Returns: Checks that user inputs a valid row# then checks if the board is full, then if there is a winner, otherwise it changes player and returns True
     def makeMove(self, colChoice):
 
         #Makes sure the column is valid
         try:
-            row = model.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
+            row = model.checkRow(model.getBoard(), colChoice)
             model.getBoard()[row][colChoice] = self.playerValue
             self.moveCount += 1
 
@@ -113,19 +116,20 @@ class Model:
             print("Please Enter A Valid Column \n")
             time.sleep(.5)
             return True
+    #Returns: Ends the game and prints out who the winner is
     def endGame(self):
         if model.playerValue == 1:
             time.sleep(.5)
             root.destroy()
             # Label(start.root, text="Player 1 is the Winner!!", font=header).grid(row=2, column=2, rowspan=4,columnspan=6)
             print("Player 1 is the winner!!")
-            # return False
+            return False
         else:
             time.sleep(.5)
             root.destroy()
             # Label(start.root, text="Player 2 is the Winner!!", font=header).grid(row=2, column=2, rowspan=4, columnspan=6)
             print("Player 2 is the winner!!")
-            # return False
+            return False
 
 
 # Initialize View and Model
@@ -154,13 +158,10 @@ class Controller:
         option = view.getUserInput("Type text or gui for your version of Connect Four\n")
         if option.lower() == "gui":
             self.gui()
-        if option == "txt":
-            self.textView()
         else:
             self.textView()
     # Creates the gui
-    # Params: master is the main root
-    # Returns: Creates a gui
+    # Returns: Creates a gui by adding frames and buttons to the root window
     def gui(self):
         header = tkinter.font.Font(size=20, weight=tkinter.font.BOLD)
         Label(root, text="Connect Four", anchor=N, font=header).grid(row=0, column=2, columnspan=3)
@@ -193,6 +194,7 @@ class Controller:
         Button(self.bottomFrame, text="Switch Views", relief = "groove",width= 15,command=lambda: self.switchToText()).grid(row=10,column=4)
         root.mainloop()
 
+    #Returns: Runs the text view of the game and gets the user input and continues the game based on their choice.
     def textView(self):
         run = True
         #Game Loop
@@ -206,13 +208,12 @@ class Controller:
                     view.displayBoard(model.getBoard())
 
                     colChoice = int(
-                        view.getUserInput("Which Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
-                    if colChoice == 8 or colChoice == 7:
-                        break #Continues game
+                        view.getUserInput("Select a Column 0,1,2,3,4,5, or 6 (or type 9 to go into gui view) \n"))
+                    if colChoice == 8:
+                        break
                     if colChoice == 9:
-                        #Supposed to bring window back up
+
                         self.gui()
-                        # run = False
                         # break
                     run = model.makeMove(colChoice)
 
@@ -221,9 +222,10 @@ class Controller:
                     print("Please Enter A Valid Column \n")
                     time.sleep(.5)
         exit()
+
     #Adds a piece to the board
-    #Params:Canvas, Boolean player value, col which was selected
-    #Returns: Creates a piece on the board
+    #Params: col - user selected col
+    #Returns: adds a piece to the canvas as well as adding it to the game board to track the text view and keep game logic
     def addPiece(self, col):
         #Starting coord for row 1 , x0 =5 , y0 = 500 , x1 = 105 , y1= 600
         playerValueFont = tkinter.font.Font(size=15, weight=tkinter.font.BOLD)
@@ -323,21 +325,14 @@ class Controller:
                 self.coords_col_7[3] -= 100
                 model.makeMove(col)
     #Switches the veiw from the GUI to the text view
-    #Params: Master represents the root
     #Returns: Closes the GUI and runs the text view
     def switchToText(self):
         root.withdraw()
         self.textView()
 
     # Closes the GUI
-    # Params: Master represents the root
-    # Returns: Nothing
+    # Returns: destroys the root window
     def quit(self):
         root.destroy()
-    #Runs the text view
-    #Params: None
-    #Returns: Creates the text view board
-
-#Starts Tkinter window and runs in loop until user exits
-
+#Starts everything
 start = Controller()
