@@ -96,7 +96,7 @@ class Model:
             row = model.checkRow(model.getBoard(), colChoice, self.ROW_COUNT)
             model.getBoard()[row][colChoice] = self.playerValue
             self.moveCount += 1
-            #********need a  check that they can't go out of range*****
+
             if self.moveCount == 43:
                 print("No Winner")
 
@@ -159,8 +159,8 @@ class Controller:
             self.gui()
         if option == "txt":
             self.textView()
-        # else:
-        #     self.textView(master)
+        else:
+            self.textView()
     # Creates the gui
     # Params: master is the main root
     # Returns: Creates a gui
@@ -205,7 +205,7 @@ class Controller:
             while True:
 
                 #Try/Except to make sure user gives valid input
-                #try:
+                try:
                     view.displayBoard(model.getBoard())
 
                     colChoice = int(
@@ -220,9 +220,9 @@ class Controller:
                     run = model.makeMove(colChoice)
 
                     break #Exits the User Input Loop
-                #except:
-                    #print("Please Enter A Valid Column \n")
-                    #time.sleep(.5)
+                except:
+                    print("Please Enter A Valid Column \n")
+                    time.sleep(.5)
         exit()
     #Adds a piece to the board
     #Params:Canvas, Boolean player value, col which was selected
